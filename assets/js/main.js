@@ -12,13 +12,14 @@ $(document).ready(function() {
 			endDate = moment(endTime).format("MM/DD/YY");
 			console.log(endTime);
 
+			var diffTime = moment(endTime).diff(moment(startTime), "minutes");
+			console.log(diffTime);			
+
 			var newTimeInput = {
 				codeDate: endDate,
 				minutes: diffTime
 			}
 
-			var diffTime = moment(endTime).diff(moment(startTime), "minutes");
-			console.log(diffTime);
 			timeData.push(newTimeInput);
 		});
 		return false;
