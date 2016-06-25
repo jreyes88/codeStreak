@@ -12,7 +12,7 @@ $(document).ready(function() {
 	$("#startButton").on("click", function() {
 
 		// 1. Logs the time that start button was clicked
-		startTime = moment(startTime).format("MM/DD/YY hh:mm:ss");
+		startTime = moment(startTime).format("MM/DD/YY HH:mm:ss");
 		
 		// 2. Logs the name of the project
 		projectInputName = $("#workName").val().trim();
@@ -21,7 +21,7 @@ $(document).ready(function() {
 		$("#endButton").on("click", function() {
 			
 			// 3. Logs the time that the start button was clicked (used to calculate number of minutes)
-			endTime = moment(endTime).format("MM/DD/YY hh:mm:ss");
+			endTime = moment(endTime).format("MM/DD/YY HH:mm:ss");
 			
 			// 4. Logs the date that the project was worked on (used to track the actual streak)
 			endDate = moment(endDate).format("MM/DD/YY");
