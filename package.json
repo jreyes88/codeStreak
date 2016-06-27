@@ -1,0 +1,22 @@
+{
+  "name": "codestreak",
+  "version": "1.0.0",
+  "description": "simple application to track coding progress, or really progress on anything, and display an infographic for the accumulation of work done over time",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jreyes88/codeStreak.git"
+  },
+  "author": "joey reyes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jreyes88/codeStreak/issues"
+  },
+  "homepage": "https://github.com/jreyes88/codeStreak#readme",
+  "dependencies": {
+    "chart.js": "^2.1.6"
+  }
+}
