@@ -53,48 +53,42 @@ $(document).ready(function() {
 		var projectInputName = childSnapshot.val().projectName;
 
 		// Add each train's data into the table
-		$("#projectTable > tbody").append("<tr><td>" + startTime + "</td><td>" + endTime + "</td><td>" + diffTime + "</td><td>" + projectInputName + "</td></tr>");
+		$("#projectTable > tbody").prepend("<tr><td>" + startTime + "</td><td>" + endTime + "</td><td>" + diffTime + "</td><td>" + projectInputName + "</td></tr>");
 	});
 
-	// context for chart
-	var ctx = $("#myChart");
-	var myLineChart = new Chart(ctx, {
-	    type: 'line',
-	    data: data,
-	    options: {
-	        scales: {
-	            xAxes: [{
-	                display: false
-	            }]
-	        }
-	    }
-	});
+	$(function () {
 
-	var data = {
-	    labels: ["January", "February", "March", "April", "May", "June", "July"],
-	    datasets: [
-	        {
-	            label: "My First dataset",
-	            fill: false,
-	            lineTension: 0.1,
-	            backgroundColor: "rgba(75,192,192,0.4)",
-	            borderColor: "rgba(75,192,192,1)",
-	            borderCapStyle: 'butt',
-	            borderDash: [],
-	            borderDashOffset: 0.0,
-	            borderJoinStyle: 'miter',
-	            pointBorderColor: "rgba(75,192,192,1)",
-	            pointBackgroundColor: "#fff",
-	            pointBorderWidth: 1,
-	            pointHoverRadius: 5,
-	            pointHoverBackgroundColor: "rgba(75,192,192,1)",
-	            pointHoverBorderColor: "rgba(220,220,220,1)",
-	            pointHoverBorderWidth: 2,
-	            pointRadius: 1,
-	            pointHitRadius: 10,
-	            data: [65, 59, 80, 81, 56, 55, 40],
-	        }
-	    ]
-	};
+		var data = {
+			labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+			datasets: [
+				{
+					label: "The First Dataset",
+					fillColor: "rgba(153,0,76,0.2)", // magenta
+					strokeColor: "rgba(153,0,76,1)", // magenta
+					pointColor: "rgba(153,0,76,1)", // magenta
+					pointStrokeColor: "fff", // white
+					pointHighlightFill: "fff", // white
+					pointHighlightStroke: "rgba(153,0,76,1)", // magenta
+					data: [100, 34, 21, 56, 23, 90, 40]
+				},
+				{
+					label: "The Second Dataset",
+					fillColor: "rgba(76,0,153,0.2)",
+					strokeColor: "rgba(76,0,153,1)",
+					pointColor: "rgba(76,0,153,1)",
+					pointStrokeColor: "fff", // white
+					pointHighlightFill: "fff", // white
+					pointHighlightStroke: "rgba(76,0,152,1)",
+					data: [28, 48, 40, 19, 86, 27, 90]
+				}
+			]
+		};
+		var option = {};
+
+		var ctx = document.getElementById("myChart").getContext('2d');
+		var myLineChart = new Chart(ctx).Line(data, option);
+
+
+	})
 
 });
