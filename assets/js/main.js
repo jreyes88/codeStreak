@@ -9,6 +9,40 @@ var projectInputName;
 var workedTimes = [];
 var workedDates = [];
 
+var ctx = document.getElementById("myChart");
+	var myChart = new Chart(ctx , {
+	    type: "line",
+	    data: {
+	    	labels: workedDates,
+			datasets: [
+				{
+					label: "My First dataset",
+		            fill: false,
+		            lineTension: 0.1,
+		            backgroundColor: "rgba(75,192,192,0.4)",
+		            borderColor: "rgba(75,192,192,1)",
+		            borderCapStyle: 'butt',
+		            borderDash: [],
+		            borderDashOffset: 0.0,
+		            borderJoinStyle: 'miter',
+		            pointBorderColor: "rgba(75,192,192,1)",
+		            pointBackgroundColor: "#fff",
+		            pointBorderWidth: 1,
+		            pointHoverRadius: 5,
+		            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+		            pointHoverBorderColor: "rgba(220,220,220,1)",
+		            pointHoverBorderWidth: 2,
+		            pointRadius: 1,
+		            pointHitRadius: 10,
+		            data: workedTimes
+				},
+			]
+		},
+		options: {
+
+		}
+    })
+
 $("#startButton").click(function() {
 	startTimer();
 	return false;
@@ -46,7 +80,14 @@ function endTimer() {
 
 	// 5. Calculates the time difference
 	var diffTime = moment(endTime).diff(moment(startTime), "minutes");
-	console.log("Time Difference: " + diffTime);	
+	console.log("Time Difference: " + diffTime);
+	// 7. Pushes the diffTime into the workedTimes array
+	
+	workedTimes.push(diffTime);
+	console.log(workedTimes);
+
+	workedDates.push(endDate.toString());
+	console.log(workedDates);
 
 	// 6. Pushes the various pieces of information into firebase
 	var newTimeInput = {
@@ -54,18 +95,11 @@ function endTimer() {
 		endTable: endTime,
 		codeDate: endDate,
 		minutes: diffTime,
-		projectName: projectInputName
+		projectName: projectInputName,
+		workTimes: workedTimes,
+		workDates: workedDates
 	}
-	timeData.push(newTimeInput);
-
-	// 7. Pushes the diffTime into the workedTimes array
-	workedTimes.push(diffTime);
-	console.log(workedTimes);
-
-	workedDates.push(endDate.toString());
-	console.log(workedDates);
-
-	$("#projectTable > tbody").prepend("<tr><td>" + startTime + "</td><td>" + endTime + "</td><td>" + diffTime + "</td><td>" + projectInputName + "</td></tr>");
+	timeData.push(newTimeInput);	
 
 	// 7. Clears all of the text-boxes after sending to database
 	$("#workName").val("");
@@ -79,44 +113,54 @@ timeData.on("child_added", function(childSnapshot, prevChildKey){
 	var endTime = childSnapshot.val().endTable;
 	var diffTime = childSnapshot.val().minutes;
 	var projectInputName = childSnapshot.val().projectName;
+	var workTimes = childSnapshot.val().workedTimes;
+	var workDates = childSnapshot.val().workedDates;
+
+	console.log(myChart);
+	workedTimes.push(workTimes);
+	console.log(workedTimes);
+	// myChart.addData([workTimes], workDates);
+	// myChart.update();
 
 	// Add each train's data into the table
 	$("#projectTable > tbody").prepend("<tr><td>" + startTime + "</td><td>" + endTime + "</td><td>" + diffTime + "</td><td>" + projectInputName + "</td></tr>");
 })
 
-$(function () {
+// $(function () {
+// 	console.log(workedDates);
+// 	console.log(workedTimes);
 	
-	var ctx = document.getElementById("myChart");
-	var myChart = new Chart(ctx , {
-	    type: "line",
-	    data: {
-	    	labels: workedDates,
-			datasets: [
-				{
-					label: "My First dataset",
-		            fill: false,
-		            lineTension: 0.1,
-		            backgroundColor: "rgba(75,192,192,0.4)",
-		            borderColor: "rgba(75,192,192,1)",
-		            borderCapStyle: 'butt',
-		            borderDash: [],
-		            borderDashOffset: 0.0,
-		            borderJoinStyle: 'miter',
-		            pointBorderColor: "rgba(75,192,192,1)",
-		            pointBackgroundColor: "#fff",
-		            pointBorderWidth: 1,
-		            pointHoverRadius: 5,
-		            pointHoverBackgroundColor: "rgba(75,192,192,1)",
-		            pointHoverBorderColor: "rgba(220,220,220,1)",
-		            pointHoverBorderWidth: 2,
-		            pointRadius: 1,
-		            pointHitRadius: 10,
-		            data: workedTimes
-				},
-			]
-		},
-		options: {
+// 	var ctx = document.getElementById("myChart");
+// 	var myChart = new Chart(ctx , {
+// 	    type: "line",
+// 	    data: {
+// 	    	labels: workedDates,
+// 			datasets: [
+// 				{
+// 					label: "My First dataset",
+// 		            fill: false,
+// 		            lineTension: 0.1,
+// 		            backgroundColor: "rgba(75,192,192,0.4)",
+// 		            borderColor: "rgba(75,192,192,1)",
+// 		            borderCapStyle: 'butt',
+// 		            borderDash: [],
+// 		            borderDashOffset: 0.0,
+// 		            borderJoinStyle: 'miter',
+// 		            pointBorderColor: "rgba(75,192,192,1)",
+// 		            pointBackgroundColor: "#fff",
+// 		            pointBorderWidth: 1,
+// 		            pointHoverRadius: 5,
+// 		            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+// 		            pointHoverBorderColor: "rgba(220,220,220,1)",
+// 		            pointHoverBorderWidth: 2,
+// 		            pointRadius: 1,
+// 		            pointHitRadius: 10,
+// 		            data: workedTimes
+// 				},
+// 			]
+// 		},
+// 		options: {
 
-		}
-    })
-});
+// 		}
+//     })
+// });
