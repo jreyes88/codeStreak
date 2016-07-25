@@ -1,5 +1,3 @@
-var streakData = new Firebase("https://codetracker.firebaseio.com/");
-
 var startTime;
 var endTime;
 var endDate;
@@ -12,17 +10,22 @@ function startTimer() {
 
 	// 1. Logs the time that start button was clicked
 	startTime = moment(startTime).format("YYYY-MM-DD HH:mm:ss");
-	console.log("Start Time: " + startTime);
+	// console.log("Start Time: " + startTime);
 
 	// 2. Logs the name of the project
 	projectInputName = $("#workName").val().trim();
 	console.log("Project Name: " + projectInputName);
 
-	return(startTime);
+	$("#endButton").click(function() {
+		endTimer(startTime, projectInputName);
+		return false;
+	});
 };
 
 // Click events that occur when the end button is clicked
-function endTimer(startTime) {
+function endTimer(startTime, projectInputName) {
+
+	console.log("Start Time: " + startTime);
 			
 	// 3. Logs the time that the start button was clicked (used to calculate number of minutes)
 	endTime = moment(endTime).format("YYYY-MM-DD HH:mm:ss");
@@ -33,7 +36,7 @@ function endTimer(startTime) {
 	console.log("End Date: " + endDate);
 
 	// 5. Calculates the time difference
-	var diffTime = moment(startTime).diff(moment(endTime), "minutes");
+	var diffTime = moment(endTime).diff(moment(startTime), "minutes");
 	console.log("Time Difference: " + diffTime);
 
 	// 7. Pushes the diffTime into the workedTimes array
@@ -47,10 +50,10 @@ function endTimer(startTime) {
 	$("#workName").val("");
 
 	// 8 I hope this populates the chart
-	populateChart(workedDates, workedTimes)
+	populateChart(workedDates, workedTimes, projectInputName);
 };
 
-function populateChart(populateChartDateArray, populateChartTimeArray) {
+function populateChart(populateChartDateArray, populateChartTimeArray, populateChartProjectName) {
 	var ctx = document.getElementById("myChart");
 	var myChart = new Chart(ctx , {
 		type: "line",
@@ -58,7 +61,7 @@ function populateChart(populateChartDateArray, populateChartTimeArray) {
 			labels: populateChartDateArray,
 			datasets: [
 				{
-					label: "My First dataset",
+					label: populateChartProjectName,
 					fill: false,
 					lineTension: 0.1,
 					backgroundColor: "rgba(75,192,192,0.4)",
@@ -82,77 +85,11 @@ function populateChart(populateChartDateArray, populateChartTimeArray) {
 		},
 		options: {
 
-		};
+		}
 	});
 };
 
 $("#startButton").click(function() {
 	startTimer();
 	return false;
-});
-
-$("#endButton").click(function() {
-	endTimer();
-	return false;
-});
-
-// Button for adding Trains
-$("#addTrainBtn").on("click", function(){
-
-	// Grabs user input
-	var trainName = $("#trainNameInput").val().trim();
-	var trainDestination = $("#destinationInput").val().trim();
-	var firstTrainTime = $("#firstTrainTimeInput").val().trim();
-	var trainFrequency = $("#frequencyInput").val().trim();
-
-	// Creates local "temporary" object for holding new train data
-	var newTrain = {
-		name:  trainName,
-		destination: trainDestination,
-		start: firstTrainTime,
-		frequency: trainFrequency
-	}
-
-	// Uploads new train data to the database
-	trainData.push(newTrain);
-
-	// Clears all of the text-boxes after sending to database
-	$("#trainNameInput").val("");
-	$("#destinationInput").val("");
-	$("#firstTrainTimeInput").val("");
-	$("#frequencyInput").val("");
-
-	// Prevents moving to new page
-	return false;
-});
-
-// Create Firebase event for adding train to the database and a row in the html when a user adds an entry
-trainData.on("child_added", function(childSnapshot, prevChildKey){
-
-	// Store everything into a variable.
-	var trainName = childSnapshot.val().name;
-	var trainDestination = childSnapshot.val().destination;
-	var firstTrainTime = childSnapshot.val().start;
-	var trainFrequency = childSnapshot.val().frequency;
-
-	// First Time (pushed back 1 year to make sure it comes before current time)
-	var firstTimeConverted = moment(firstTrainTime,"hh:mm").subtract(1, "years");
-
-	// Prettify the train start
-	var currentTime = moment();
-
-	// Difference between current time and train's first time
-	var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-
-	// Time apart (remainder)
-	var tRemainder = diffTime % trainFrequency;
-
-	// Minutes until train
-	var tMinutesTillTrain = trainFrequency - tRemainder;
-
-	// Next Train
-	var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-
-	// Add each train's data into the table
-	$("#trainTable > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" + trainFrequency + "</td><td>" + moment(nextTrain).format("hh:mm") + "</td><td>" + tMinutesTillTrain + "</td></tr>");
 });
